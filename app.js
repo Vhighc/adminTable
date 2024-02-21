@@ -5,6 +5,7 @@ const app = Vue.createApp({
             currentTab: 0,
             tabs: ["All", "Paid", "Unpaid", "Overdue"],
             title: 'TABLE HEADING',
+            expandedRows: [],
             names: [
                 { fullname: 'Justin Septimus', email: 'tinsep@email.com', user: 'Active', lastlogin: 'Last login: 14/APR/2020', pay: 'Paid', date: 'Paid on 15/APR/2020', amount: 200, isFav: true },
                 { fullname: 'Anika Rhiel Madsen', email: 'kalsen@email.com', user: 'Active', lastlogin: 'Last login: 14/APR/2020', pay: 'Overdue', date: 'Paid on 15/APR/2020', amount: 300, isFav: true },
@@ -17,7 +18,6 @@ const app = Vue.createApp({
                 { fullname: 'Phillip Saris', email: 'lisar@email.com', user: 'Inactive', lastlogin: 'Last login: 14/APR/2020', pay: 'Unpaid', date: 'Paid on 15/APR/2020', amount: 200, isFav: false },
                 { fullname: 'Cheyenne Ekstrom Bothman', email: 'romman@email.com', user: 'Inactive', lastlogin: 'Last login: 14/APR/2020', pay: 'paid', date: 'Paid on 15/APR/2020', amount: 150, isFav: false }
             ]
-
         };
     },
     methods: {
@@ -26,9 +26,19 @@ const app = Vue.createApp({
         },
         search() {
             // 
-        }
+        },
+        toggleDropdown(index) {
+            if (this.expandedRows.includes(index)) {
+              this.expandedRows = this.expandedRows.filter((i) => i !== index);
+            } else {
+              this.expandedRows.push(index);
+            }
+        },
+        // togglePaid(name) {
+        //     name.isFav = !name.isFav
+        // }
     },
-
+ 
     computed: {
         paidUsers() {
             return this.names.filter((name) => name.pay !== 'Unpaid' & name.pay !== 'Overdue');
@@ -40,7 +50,7 @@ const app = Vue.createApp({
             return this.names.filter((name) => name.pay === 'Overdue');
         },
 
-        
+
         filteredNames() {
             const term = this.searchTerm.toLowerCase();
             if (this.currentTab === 1) {
@@ -65,8 +75,7 @@ const app = Vue.createApp({
                 )
             }
         },
-
-        
+      
         totalSum() {
             if (this.currentTab === 1) {
                 return this.paidUsers.reduce((total, user) => total + user.amount, 0);

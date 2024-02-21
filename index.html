@@ -25,6 +25,13 @@
         <div class="table-wrapper">
             <div class="filters" style="padding: 2% 0 2% 2%;">
                 <button style="font-weight: 400; font-size: 16px; background-color: #FFFFFF; border: 1px solid #C6C2DE; border-radius: 3px; width: 70px; height: 30px;"><p>Filter</p></button>
+                <!-- <button @click="toggleFilterModal" style="font-weight: 400; font-size: 16px; background-color: #FFFFFF; border: 1px solid #C6C2DE; border-radius: 3px; width: 70px; height: 30px;"><p>Filter</p></button> -->
+                <!-- <div v-if="showFilterModal" class="filter-modal">
+                    <h2>Sort by:</h2>
+                    <button @click="sortBy('fullname')">Fullname</button>
+                    <button @click="sortBy('email')">Email</button>
+                    <button @click="toggleFilterModal">Close</button>
+                </div> -->
                 <input v-model="searchTerm" @input="search" placeholder="Search Users by Name or Email" style="outline: none; margin-left: 2%; background-color: #F2F0F9; width: 300px; height: 30px; border: none; border-radius: 5px;">
                 <button type="button" style="width: 100px; height: 30px; border: none; margin-left: 41%; border-radius: 5px; font-size: 16px; font-weight: 600; color: #FFFFFF; background-color: #6D5BD0;">PAY DUES</button>
             </div>
@@ -34,32 +41,43 @@
                         <col span="2" style="background-color: aquamarine;">
                         <col span="2" style="background-color: yellow;">
                     </colgroup> -->
-                    <tr>
-                        <th colspan="2"><input type="checkbox" name="" id="" style="display: flex; justify-content: flex-start;"></th>
+                    <tr style="height: 30px;">
+                        <th colspan="2"><input type="checkbox" name="" id="" style="position: relative; left: 3px; display: flex; justify-content: flex-start;"></th>
                         <th>NAME</th>
                         <th>USER STATUS</th>
                         <th>PAYMENT STATUS</th>
                         <th>AMOUNT</th>
                         <th colspan="2" style="text-align: right;">:</th>
                     </tr>
-                    <tr v-for="name in filteredNames" v-if="currentTab === 0" :class="{ fav: name.isFav, nfav: !name.isFav, pad:name.pay !== 'Overdue' & name.pay !== 'Unpaid', npad:name.pay === 'Unpaid', odue:name.pay === 'Overdue' }" style="text-align: center;" >
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td>
-                            <div v-on:cliick="toggleShowAll">
-                                <img src="./images/Icon/Master.svg" alt="">
-                            </div>
+                    <tr v-for="(name, index) in filteredNames" :key="index" v-if="currentTab === 0" :class="{ fav: name.isFav, nfav: !name.isFav, pad:name.pay !== 'Overdue' & name.pay !== 'Unpaid', npad:name.pay === 'Unpaid', odue:name.pay === 'Overdue' }" style="text-align: center;" >
+                        <td @click="togglePaid(name)"><input type="checkbox" name="" id=""></td>
+                        <!-- <td @click="togglePaid(name)"><input type="checkbox" name="" id=""></td> -->
+                        <td class="toggle" @click="toggleDropdown(index)">
+                                <div  v-if="expandedRows.includes(index)">
+                                    <img src="./images/Icon/Master.svg" alt="">
+                                </div>
+                                <div v-else>
+                                    <img src="./images/Icon/Icon/Master.svg" alt="">
+                                </div>
                         </td>
                         <td>
                             <p style="color: #25213B; font-weight: 500; font-size: 14px;">{{name.fullname}}</p>
                             <p style="color: #6E6893; font-weight: 400; font-size: 14px;">{{name.email}}</p>
+                            <div v-if="expandedRows.includes(index)" class="dropdown-content">
+                                <h4>Date</h4>
+                            </div>
                         </td>
                         <td>
-                            <p style="font-size: 12px; font-weight: 500;"><span>.</span>{{name.user}}</p>
+                            <div style=" width: 30%; margin: 0 auto; "><p style="font-size: 12px; font-weight: 500;"><span style="font-size: 22px;">.</span>{{name.user}}</p></div>
+                            
                             <p style="color: #6E6893; font-weight: 400; font-size: 12px;">{{name.lastlogin}}</p>
+                            <div v-if="expandedRows.includes(index)" class="dropdown-content">User Activty</div>
                         </td>
                         <td>
-                            <p style="font-size: 12px; font-weight: 500; "><span>.</span>{{name.pay}}</p>
+                            <div style=" width: 30%; margin: 0 auto; "><p style="font-size: 12px; font-weight: 500; "><span style="font-size: 22px;">.</span>{{name.pay}}</p></div>
+                            
                             <p style="color: #25213B; font-weight: 500; font-size: 12px;">{{name.date}}</p>
+                            <div v-if="expandedRows.includes(index)" class="dropdown-content">detail</div>
                         </td>
                         <td>
                             <p style="font-size: 14px; font-weight: 500; color: #25213B;">${{name.amount}}</p>
@@ -70,23 +88,30 @@
                     </tr>
                     <tr v-else-if="currentTab === 1" :class="{ fav: name.isFav, nfav: !name.isFav, pad:name.pay !== 'Overdue' & name.pay !== 'Unpaid', npad:name.pay === 'Unpaid', odue:name.pay === 'Overdue' }" style="text-align: center;" v-for="name in filteredNames" >
                         <td><input type="checkbox" name="" id=""></td>
-                        <td>
-                            <div v-on:cliick="toggleShowAll">
+                        <td class="toggle" @click="toggleDropdown(index)">
+                            <div  v-if="expandedRows.includes(index)">
                                 <img src="./images/Icon/Master.svg" alt="">
+                            </div>
+                            <div v-else>
+                                <img src="./images/Icon/Icon/Master.svg" alt="">
                             </div>
                         </td>
                         <td>
                             <p style="color: #25213B; font-weight: 500; font-size: 14px;">{{name.fullname}}</p>
                             <p style="color: #6E6893; font-weight: 400; font-size: 14px;">{{name.email}}</p>
+                            <div v-if="expandedRows.includes(index)" class="dropdown-content">
+                                <h4>Date</h4>
+                            </div>
                         </td>
-
                         <td>
                             <p style="font-size: 12px; font-weight: 500;"><span>.</span>{{name.user}}</p>
                             <p style="color: #6E6893; font-weight: 400; font-size: 12px;">{{name.lastlogin}}</p>
+                            <div v-if="expandedRows.includes(index)" class="dropdown-content">User Activty</div>
                         </td>
                         <td>
                             <p style="font-size: 12px; font-weight: 500; "><span>.</span>{{name.pay}}</p>
                             <p style="color: #25213B; font-weight: 500; font-size: 12px;">{{name.date}}</p>
+                            <div v-if="expandedRows.includes(index)" class="dropdown-content">detail</div>
                         </td>
                         <td>
                             <p style="font-size: 14px; font-weight: 500; color: #25213B;">${{name.amount}}</p>
@@ -97,22 +122,30 @@
                     </tr>
                     <tr v-else-if="currentTab === 2" :class="{ fav: name.isFav, nfav: !name.isFav, pad:name.pay !== 'Overdue' & name.pay !== 'Unpaid', npad:name.pay === 'Unpaid', odue:name.pay === 'Overdue' }" style="text-align: center;" v-for="name in filteredNames" >
                         <td><input type="checkbox" name="" id=""></td>
-                        <td>
-                            <div v-on:cliick="toggleShowAll">
+                        <td class="toggle" @click="toggleDropdown(index)">
+                            <div  v-if="expandedRows.includes(index)">
                                 <img src="./images/Icon/Master.svg" alt="">
+                            </div>
+                            <div v-else>
+                                <img src="./images/Icon/Icon/Master.svg" alt="">
                             </div>
                         </td>
                         <td>
                             <p style="color: #25213B; font-weight: 500; font-size: 14px;">{{name.fullname}}</p>
                             <p style="color: #6E6893; font-weight: 400; font-size: 14px;">{{name.email}}</p>
+                            <div v-if="expandedRows.includes(index)" class="dropdown-content">
+                                <h4>Date</h4>
+                            </div>
                         </td>
                         <td>
                             <p style="font-size: 12px; font-weight: 500;"><span>.</span>{{name.user}}</p>
                             <p style="color: #6E6893; font-weight: 400; font-size: 12px;">{{name.lastlogin}}</p>
+                            <div v-if="expandedRows.includes(index)" class="dropdown-content">User Activty</div>
                         </td>
                         <td>
                             <p style="font-size: 12px; font-weight: 500; "><span>.</span>{{name.pay}}</p>
                             <p style="color: #25213B; font-weight: 500; font-size: 12px;">{{name.date}}</p>
+                            <div v-if="expandedRows.includes(index)" class="dropdown-content">detail</div>
                         </td>
                         <td>
                             <p style="font-size: 14px; font-weight: 500; color: #25213B;">${{name.amount}}</p>
@@ -121,24 +154,32 @@
                         <td style="color: #6E6893; font-weight: 500; font-size: 12px;">View More</td>
                         <td>:</td>
                     </tr>
-                    <tr :class="{ fav: name.isFav, nfav: !name.isFav, pad:name.pay !== 'Overdue' & name.pay !== 'Unpaid', npad:name.pay === 'Unpaid', odue:name.pay === 'Overdue' }" style="text-align: center;" v-for="name in filteredNames" >
+                    <tr v-else-if="currentTab === 3" :class="{ fav: name.isFav, nfav: !name.isFav, pad:name.pay !== 'Overdue' & name.pay !== 'Unpaid', npad:name.pay === 'Unpaid', odue:name.pay === 'Overdue' }" style="text-align: center;" v-for="name in filteredNames" >
                         <td><input type="checkbox" name="" id=""></td>
-                        <td>
-                            <div v-on:cliick="toggleShowAll">
+                        <td class="toggle" @click="toggleDropdown(index)">
+                            <div  v-if="expandedRows.includes(index)">
                                 <img src="./images/Icon/Master.svg" alt="">
+                            </div>
+                            <div v-else>
+                                <img src="./images/Icon/Icon/Master.svg" alt="">
                             </div>
                         </td>
                         <td>
                             <p style="color: #25213B; font-weight: 500; font-size: 14px;">{{name.fullname}}</p>
                             <p style="color: #6E6893; font-weight: 400; font-size: 14px;">{{name.email}}</p>
+                            <div v-if="expandedRows.includes(index)" class="dropdown-content">
+                                <h4>Date</h4>
+                            </div>
                         </td>
                         <td>
                             <p style="font-size: 12px; font-weight: 500;"><span>.</span>{{name.user}}</p>
                             <p style="color: #6E6893; font-weight: 400; font-size: 12px;">{{name.lastlogin}}</p>
+                            <div v-if="expandedRows.includes(index)" class="dropdown-content">User Activty</div>
                         </td>
                         <td>
                             <p style="font-size: 12px; font-weight: 500; "><span>.</span>{{name.pay}}</p>
                             <p style="color: #25213B; font-weight: 500; font-size: 12px;">{{name.date}}</p>
+                            <div v-if="expandedRows.includes(index)" class="dropdown-content">detail</div>
                         </td>
                         <td>
                             <p style="font-size: 14px; font-weight: 500; color: #25213B;">${{name.amount}}</p>
@@ -159,8 +200,7 @@
                             <th></th>
                             <th></th>
                         </tr>
-                    </div> -->
-                    
+                    </div> -->                    
                 </table>
             </div>
         </div>

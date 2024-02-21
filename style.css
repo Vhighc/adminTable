@@ -114,11 +114,16 @@ td{
 tr.fav :nth-child(4) p:nth-child(1){
     background-color: #E6E6F2;
     color: #4A4AFF;
-
+}
+tr.fav :nth-child(4) p:nth-child(1) span{
+    /* width: 24px;
+    height: 24px; */
 }
 tr.nfav :nth-child(4) p:nth-child(1){
     background-color: #F2F0F9;
     color: #6E6893;
+    /* border: 1px solid red; */
+    /* padding: 10px; */
 
 }
 tr.npad :nth-child(5) p:nth-child(1){
@@ -138,3 +143,17 @@ tr.pad :nth-child(5) p:nth-child(1){
     border-bottom: 2px solid #25213B;
 }
 
+td.toggle {
+    cursor: pointer;
+  }
+  
+  .dropdown-content {
+    /* display: none; */
+    /* padding: 10px; */
+    /* border: 1px solid #ccc; */
+    /* Add other styles as needed */
+  }
+  
+  .dropdown-content.show {
+    /* display: block; */
+  }
