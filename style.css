@@ -1,0 +1,140 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+:root{
+    --font-family-primary: "Inter", sans-serif;
+    --font-size-normal: 14px;
+    --font-size-xl: 18px;
+    --font-weight-secondary: 700;
+    --font-weight-basic: 500;
+    --primary-color: #6E6893;
+} 
+body{
+    background: #F2F0F9;   
+}
+
+.wrapper-main{
+    width: 900px;
+    margin: 0 auto;
+    /* border: 1px solid red; */
+    padding-top: 2%;
+}
+.wrapper-main h5{
+    font-family: var(--font-family-primary);
+    font-weight: var(--font-weight-secondary);
+    color: var(--primary-color);
+    font-size: var(--font-size-normal);
+    margin-bottom: 2%;
+}
+.tab-wrapper{
+    display: flex;
+    justify-content: space-between;
+    /* border: 1px solid yellow; */
+}
+.tab-wrapper p{
+    font-family: var(--font-family-primary);
+    color: #6E6893;
+    font-weight: var(--font-weight-basic);
+    font-size: var(--font-size-normal);
+}
+.tab-wrapper span{
+    font-family: var(--font-family-primary);
+    color: #6D5BD0;
+    font-size: var(--font-size-xl);
+}
+#tabs{
+    display: flex;
+    /* border: 1px solid red; */
+    flex-basis: 30%;
+    justify-content: space-between;
+}
+#tabs button{
+   border: none;
+   background-color: none;
+   font-family: var(--font-family-primary);
+   font-size: var(--font-size-normal);
+   font-weight: var(--font-weight-basic);
+   color: #6E6893;
+ }
+ #tabs button:hover {
+    /* border-bottom: 2px solid #25213B; */
+    /* cursor: pointer; */
+  }
+
+.table-wrapper{
+    background: #FFFFFF;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px 0px #00000033;
+}
+.filters{
+    border-bottom: 1px solid #D9D5EC;
+}
+button>p{
+    color: #25213B;
+    font-family: var(--font-family-primary);
+}
+table{
+    width: 100%;
+    font-family: var(--font-family-primary);
+}
+table, th, td{
+    border-collapse: collapse;
+    /* border-collapse: separate; */
+}
+/* table tr td:nth-child() {
+
+} */
+/* table tr:nth-child(even) {
+    background-color: #F2F0F9;
+} */
+table th {
+    background-color: #F2F0F9;
+}
+th{
+    font-weight: 600;
+    /* font-family: var(--font-family-primary); */
+    color: #6E6893;
+    font-size: 12px;
+    border-bottom: 1px solid #D9D5EC;
+    /* border: 1px solid #D9D5EC; */
+}
+td{
+  
+    border-bottom: 1px solid #D9D5EC;
+    /* border: 1px solid #D9D5EC; */
+}
+/* tr.fav :nth-child(4) p{
+    background-color: #E6E6F2;
+
+} */
+tr.fav :nth-child(4) p:nth-child(1){
+    background-color: #E6E6F2;
+    color: #4A4AFF;
+
+}
+tr.nfav :nth-child(4) p:nth-child(1){
+    background-color: #F2F0F9;
+    color: #6E6893;
+
+}
+tr.npad :nth-child(5) p:nth-child(1){
+    background-color: #FFECCC;
+    color: #965E00;
+}
+tr.odue :nth-child(5) p:nth-child(1){
+    background-color: #FFE0E0;
+    color: #D30000;
+}
+tr.pad :nth-child(5) p:nth-child(1){
+    background-color: #CDFFCD;
+    color: #007F00;
+}
+#tabs button.active{
+    cursor: pointer;
+    border-bottom: 2px solid #25213B;
+}
+
